@@ -2,397 +2,141 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Pain & Regret Studio</title>
 <style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    min-height: 100vh;
-    background: #0d0d0d;
-    color: #f4f0ea;
-    font-family: Georgia, "Times New Roman", serif;
-  }
-  .page {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    padding: 28px 16px 50px;
-    background:
-      radial-gradient(circle at 50% 0%, #292929 0%, #0d0d0d 42%, #050505 100%);
-  }
-  .card {
-    width: 100%;
-    max-width: 720px;
-    border: 1px solid #3b3b3b;
-    background: #111;
-    box-shadow: 0 18px 60px rgba(0,0,0,.65);
-    overflow: hidden;
-  }
-  header {
-    text-align: center;
-    padding: 30px 22px 24px;
-    border-bottom: 1px solid #343434;
-  }
-  .eyebrow {
-    font-family: Arial, sans-serif;
-    letter-spacing: 4px;
-    font-size: 11px;
-    color: #aaa;
-    text-transform: uppercase;
-  }
-  h1 {
-    margin: 10px 0 4px;
-    font-size: clamp(34px, 8vw, 58px);
-    letter-spacing: 2px;
-    line-height: .95;
-  }
-  .tagline {
-    margin: 12px 0 0;
-    color: #bcb7b0;
-    font-style: italic;
-    font-size: 16px;
-  }
-  .artist-photo {
-    width: 100%;
-    max-height: 260px;
-    object-fit: cover;
-    object-position: center 43%;
-    display: block;
-    filter: saturate(.9);
-    border-bottom: 1px solid #343434;
-  }
-  main { padding: 28px 22px 34px; }
-  .intro {
-    text-align: center;
-    color: #c8c3bc;
-    margin: 0 auto 26px;
-    max-width: 560px;
-    line-height: 1.6;
-  }
-  .progress-wrap {
-    margin: 0 0 28px;
-  }
-  .progress-label {
-    display: flex;
-    justify-content: space-between;
-    font: 11px Arial, sans-serif;
-    letter-spacing: 1.5px;
-    color: #999;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  .progress {
-    height: 4px;
-    background: #2c2c2c;
-    overflow: hidden;
-  }
-  .progress-bar {
-    height: 100%;
-    width: 0%;
-    background: #f4f0ea;
-    transition: width .25s ease;
-  }
-  .question { display: none; }
-  .question.active { display: block; animation: fade .25s ease; }
-  @keyframes fade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-  .q-number {
-    color: #8e8a84;
-    font: 11px Arial, sans-serif;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-  h2 {
-    font-size: clamp(25px, 6vw, 36px);
-    margin: 9px 0 20px;
-    line-height: 1.1;
-  }
-  .options {
-    display: grid;
-    gap: 11px;
-  }
-  .option {
-    position: relative;
-  }
-  .option input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-  }
-  .option label {
-    display: block;
-    padding: 17px 18px;
-    border: 1px solid #3b3b3b;
-    background: #171717;
-    cursor: pointer;
-    transition: .18s ease;
-    font-size: 16px;
-  }
-  .option label:hover {
-    border-color: #aaa;
-    background: #1d1d1d;
-  }
-  .option input:checked + label {
-    border-color: #f4f0ea;
-    background: #f4f0ea;
-    color: #111;
-  }
-  .option label::before {
-    content: "○";
-    margin-right: 12px;
-    color: #888;
-  }
-  .option input:checked + label::before {
-    content: "●";
-    color: #111;
-  }
-  .nav {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    margin-top: 25px;
-  }
-  button {
-    border: 1px solid #555;
-    background: transparent;
-    color: #f4f0ea;
-    padding: 13px 20px;
-    cursor: pointer;
-    font: 700 12px Arial, sans-serif;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-  }
-  button:hover { background: #f4f0ea; color: #111; }
-  button.primary { background: #f4f0ea; color: #111; border-color: #f4f0ea; }
-  button.primary:hover { background: #d8d3cc; }
-  button:disabled { opacity: .35; cursor: not-allowed; }
-  .result {
-    display: none;
-    text-align: center;
-    padding: 15px 0 5px;
-  }
-  .result.show { display: block; animation: fade .3s ease; }
-  .stamp {
-    display: inline-block;
-    border: 2px solid #f4f0ea;
-    padding: 8px 14px;
-    transform: rotate(-2deg);
-    font: 700 12px Arial, sans-serif;
-    letter-spacing: 2px;
-    margin-bottom: 18px;
-  }
-  .result h2 { margin-bottom: 14px; }
-  .details {
-    text-align: left;
-    border-top: 1px solid #383838;
-    border-bottom: 1px solid #383838;
-    margin: 24px 0;
-  }
-  .detail {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 14px 0;
-    border-bottom: 1px solid #292929;
-    font-size: 14px;
-  }
-  .detail:last-child { border-bottom: 0; }
-  .detail span:first-child { color: #888; }
-  .detail span:last-child { text-align: right; }
-  .joke {
-    color: #c8c3bc;
-    font-style: italic;
-    line-height: 1.6;
-    margin: 22px auto;
-    max-width: 520px;
-  }
-  footer {
-    border-top: 1px solid #343434;
-    padding: 17px 22px;
-    text-align: center;
-    color: #777;
-    font: 10px Arial, sans-serif;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-  }
-  @media (max-width: 480px) {
-    main { padding: 24px 17px 30px; }
-    header { padding: 26px 16px 20px; }
-    .artist-photo { max-height: 220px; }
-    .nav button { flex: 1; }
-  }
+*{box-sizing:border-box}body{margin:0;background:#090909;color:#f4f0ea;font-family:Georgia,"Times New Roman",serif}
+.page{min-height:100vh;padding:25px 15px 50px;background:radial-gradient(circle at top,#292929,#090909 45%,#040404)}
+.card{max-width:720px;margin:auto;background:#111;border:1px solid #3a3a3a;box-shadow:0 20px 65px #000;overflow:hidden}
+header{text-align:center;padding:30px 20px;border-bottom:1px solid #333}
+.eyebrow{font:11px Arial,sans-serif;letter-spacing:3px;color:#aaa;text-transform:uppercase}
+h1{font-size:clamp(34px,8vw,58px);line-height:.95;letter-spacing:2px;margin:11px 0}
+.tagline{color:#bcb7b0;font-style:italic}.artist{width:100%;max-height:270px;object-fit:cover;display:block;border-bottom:1px solid #333}
+main{padding:28px 21px 35px}.intro{text-align:center;color:#c8c3bc;line-height:1.6;margin:0 auto 26px;max-width:560px}
+.progress-label{display:flex;justify-content:space-between;font:11px Arial;color:#999;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.progress{height:4px;background:#2b2b2b}.bar{height:100%;width:0;background:#eee;transition:.25s}
+.question{display:none}.question.active{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.qnum{font:11px Arial;color:#888;letter-spacing:2px;text-transform:uppercase}.question h2{font-size:clamp(25px,6vw,36px);line-height:1.1;margin:9px 0 20px}
+.options{display:grid;gap:11px}.option input{position:absolute;opacity:0}.option label{display:block;padding:17px 18px;border:1px solid #3b3b3b;background:#171717;cursor:pointer;font-size:16px;transition:.18s}
+.option label:hover{background:#202020;border-color:#aaa}.option input:checked+label{background:#f4f0ea;color:#111;border-color:#f4f0ea}
+.option label:before{content:"○";margin-right:12px;color:#888}.option input:checked+label:before{content:"●";color:#111}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:25px}button{border:1px solid #555;background:transparent;color:#f4f0ea;padding:13px 20px;cursor:pointer;font:bold 12px Arial;letter-spacing:1.5px;text-transform:uppercase}
+button:hover{background:#f4f0ea;color:#111}button.primary{background:#f4f0ea;color:#111;border-color:#f4f0ea}button:disabled{opacity:.35;cursor:not-allowed}
+.result{display:none;text-align:center}.result.show{display:block;animation:fade .3s}.stamp{display:inline-block;border:2px solid #eee;padding:8px 13px;transform:rotate(-2deg);font:bold 12px Arial;letter-spacing:2px;margin-bottom:18px}
+.details{text-align:left;border-top:1px solid #383838;border-bottom:1px solid #383838;margin:24px 0}.detail{display:flex;justify-content:space-between;gap:18px;padding:14px 0;border-bottom:1px solid #292929;font-size:14px}.detail:last-child{border:0}.detail span:first-child{color:#888}.detail span:last-child{text-align:right}
+.joke{color:#c8c3bc;font-style:italic;line-height:1.6;max-width:530px;margin:20px auto}.availability-note{color:#aaa;font:12px Arial;letter-spacing:1px;text-transform:uppercase;margin:0 0 18px}
+footer{border-top:1px solid #333;padding:17px;text-align:center;color:#777;font:10px Arial;letter-spacing:1.5px}
+.confirm{display:none;text-align:center}.confirm.show{display:block;animation:fade .3s}.confirm h2{font-size:clamp(29px,7vw,45px)}.no-wrap{position:relative;height:110px;margin:10px auto 0;max-width:360px}.no-btn{position:absolute;left:50%;transform:translateX(25px);transition:left .12s,top .12s}
+.yes-btn{margin-top:10px}
+@media(max-width:480px){main{padding:24px 16px 30px}.detail{font-size:13px}.nav button{flex:1}}
 </style>
 </head>
 <body>
-<div class="page">
-  <div class="card">
-    <header>
-      <div class="eyebrow">Private Tattoo Booking • Est. 2026</div>
-      <h1>PAIN &amp; REGRET<br>STUDIO</h1>
-      <div class="tagline">Making questionable decisions permanent.</div>
-    </header>
+<div class="page"><div class="card">
+<header><div class="eyebrow">Private Tattoo Booking • Est. 2026</div><h1>PAIN &amp; REGRET<br>STUDIO</h1><div class="tagline">Making questionable decisions permanent.</div></header>
+<img class="artist" src="artist.jpg" alt="Pain & Regret Studio artist">
+<main>
+<p class="intro">Welcome. Before we put anything permanent on your body, we need to ask a few extremely important questions.</p>
 
-    <img class="artist-photo" src="artist.jpg" alt="Pain & Regret Studio artist">
+<div id="quiz">
+<div class="progress-label"><span>Booking questionnaire</span><span id="counter"></span></div><div class="progress"><div class="bar" id="bar"></div></div>
 
-    <main>
-      <p class="intro">
-        Welcome. Before we put anything permanent on your body, we need to ask
-        a few extremely important questions.
-      </p>
+<section class="question active" data-q="0"><div class="qnum">Question 01</div><h2>What kind of tattoo are you looking for?</h2><div class="options">
+<div class="option"><input id="a0" type="radio" name="q0" value="Something small & simple"><label for="a0">Something small &amp; simple</label></div>
+<div class="option"><input id="b0" type="radio" name="q0" value="Something cute"><label for="b0">Something cute</label></div>
+<div class="option"><input id="c0" type="radio" name="q0" value="Hello Kitty 🎀"><label for="c0">Hello Kitty 🎀</label></div>
+<div class="option"><input id="d0" type="radio" name="q0" value="Something pretty"><label for="d0">Something pretty</label></div>
+<div class="option"><input id="e0" type="radio" name="q0" value="Something bold"><label for="e0">Something bold</label></div>
+<div class="option"><input id="f0" type="radio" name="q0" value="I have no idea. I just trust you."><label for="f0">I have no idea. I just trust you.</label></div>
+</div></section>
 
-      <div id="quiz">
-        <div class="progress-wrap">
-          <div class="progress-label">
-            <span>Booking questionnaire</span>
-            <span id="counter">1 / 5</span>
-          </div>
-          <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
-        </div>
+<section class="question" data-q="1"><div class="qnum">Question 02</div><h2>What's your preferred tattoo style?</h2><div class="options">
+<div class="option"><input id="a1" type="radio" name="q1" value="Fine line"><label for="a1">Fine line</label></div>
+<div class="option"><input id="b1" type="radio" name="q1" value="Minimalist"><label for="b1">Minimalist</label></div>
+<div class="option"><input id="c1" type="radio" name="q1" value="Cute"><label for="c1">Cute</label></div>
+<div class="option"><input id="d1" type="radio" name="q1" value="Traditional"><label for="d1">Traditional</label></div>
+<div class="option"><input id="e1" type="radio" name="q1" value="Black & grey"><label for="e1">Black &amp; grey</label></div>
+<div class="option"><input id="f1" type="radio" name="q1" value="Surprise me"><label for="f1">Surprise me</label></div>
+</div></section>
 
-        <section class="question active" data-question="0">
-          <div class="q-number">Question 01</div>
-          <h2>What kind of tattoo are you looking for?</h2>
-          <div class="options">
-            <div class="option"><input id="q0a" type="radio" name="q0" value="Something small & simple"><label for="q0a">Something small &amp; simple</label></div>
-            <div class="option"><input id="q0b" type="radio" name="q0" value="Something cute"><label for="q0b">Something cute</label></div>
-            <div class="option"><input id="q0c" type="radio" name="q0" value="Hello Kitty"><label for="q0c">Hello Kitty 🎀</label></div>
-            <div class="option"><input id="q0d" type="radio" name="q0" value="Something pretty"><label for="q0d">Something pretty</label></div>
-            <div class="option"><input id="q0e" type="radio" name="q0" value="Something bold"><label for="q0e">Something bold</label></div>
-            <div class="option"><input id="q0f" type="radio" name="q0" value="I have no idea. I just trust you."><label for="q0f">I have no idea. I just trust you.</label></div>
-          </div>
-        </section>
+<section class="question" data-q="2"><div class="qnum">Question 03</div><h2>Where would you like your tattoo?</h2><div class="options">
+<div class="option"><input id="a2" type="radio" name="q2" value="Arm"><label for="a2">Arm</label></div>
+<div class="option"><input id="b2" type="radio" name="q2" value="Wrist"><label for="b2">Wrist</label></div>
+<div class="option"><input id="c2" type="radio" name="q2" value="Hand"><label for="c2">Hand</label></div>
+<div class="option"><input id="d2" type="radio" name="q2" value="Shoulder"><label for="d2">Shoulder</label></div>
+<div class="option"><input id="e2" type="radio" name="q2" value="Chest"><label for="e2">Chest</label></div>
+<div class="option"><input id="f2" type="radio" name="q2" value="Back"><label for="f2">Back</label></div>
+</div></section>
 
-        <section class="question" data-question="1">
-          <div class="q-number">Question 02</div>
-          <h2>What's your preferred tattoo style?</h2>
-          <div class="options">
-            <div class="option"><input id="q1a" type="radio" name="q1" value="Fine line"><label for="q1a">Fine line</label></div>
-            <div class="option"><input id="q1b" type="radio" name="q1" value="Minimalist"><label for="q1b">Minimalist</label></div>
-            <div class="option"><input id="q1c" type="radio" name="q1" value="Cute"><label for="q1c">Cute</label></div>
-            <div class="option"><input id="q1d" type="radio" name="q1" value="Traditional"><label for="q1d">Traditional</label></div>
-            <div class="option"><input id="q1e" type="radio" name="q1" value="Black & grey"><label for="q1e">Black &amp; grey</label></div>
-            <div class="option"><input id="q1f" type="radio" name="q1" value="Surprise me"><label for="q1f">Surprise me</label></div>
-          </div>
-        </section>
+<section class="question" data-q="3"><div class="qnum">Question 04</div><h2>How are you feeling about the pain?</h2><div class="options">
+<div class="option"><input id="a3" type="radio" name="q3" value="I'm not worried"><label for="a3">I'm not worried</label></div>
+<div class="option"><input id="b3" type="radio" name="q3" value="A little nervous"><label for="b3">A little nervous</label></div>
+<div class="option"><input id="c3" type="radio" name="q3" value="I already regret this"><label for="c3">I already regret this</label></div>
+<div class="option"><input id="d3" type="radio" name="q3" value="I would like emotional support"><label for="d3">I would like emotional support</label></div>
+</div></section>
 
-        <section class="question" data-question="2">
-          <div class="q-number">Question 03</div>
-          <h2>Where would you like your tattoo?</h2>
-          <div class="options">
-            <div class="option"><input id="q2a" type="radio" name="q2" value="Arm"><label for="q2a">Arm</label></div>
-            <div class="option"><input id="q2b" type="radio" name="q2" value="Wrist"><label for="q2b">Wrist</label></div>
-            <div class="option"><input id="q2c" type="radio" name="q2" value="Hand"><label for="q2c">Hand</label></div>
-            <div class="option"><input id="q2d" type="radio" name="q2" value="Shoulder"><label for="q2d">Shoulder</label></div>
-            <div class="option"><input id="q2e" type="radio" name="q2" value="Chest"><label for="q2e">Chest</label></div>
-            <div class="option"><input id="q2f" type="radio" name="q2" value="Back"><label for="q2f">Back</label></div>
-          </div>
-        </section>
+<section class="question" data-q="4"><div class="qnum">Question 05</div><h2>How committed are you to your decision?</h2><div class="options">
+<div class="option"><input id="a4" type="radio" name="q4" value="100% — let's do it"><label for="a4">100% — let's do it</label></div>
+<div class="option"><input id="b4" type="radio" name="q4" value="Pretty committed"><label for="b4">Pretty committed</label></div>
+<div class="option"><input id="c4" type="radio" name="q4" value="I'll probably change my mind"><label for="c4">I'll probably change my mind</label></div>
+<div class="option"><input id="d4" type="radio" name="q4" value="I have absolutely no idea, I just trust you."><label for="d4">I have absolutely no idea, I just trust you.</label></div>
+</div></section>
 
-        <section class="question" data-question="3">
-          <div class="q-number">Question 04</div>
-          <h2>How are you feeling about the pain?</h2>
-          <div class="options">
-            <div class="option"><input id="q3a" type="radio" name="q3" value="I'm not worried"><label for="q3a">I'm not worried</label></div>
-            <div class="option"><input id="q3b" type="radio" name="q3" value="A little nervous"><label for="q3b">A little nervous</label></div>
-            <div class="option"><input id="q3c" type="radio" name="q3" value="I already regret this"><label for="q3c">I already regret this</label></div>
-            <div class="option"><input id="q3d" type="radio" name="q3" value="I would like emotional support"><label for="q3d">I would like emotional support</label></div>
-          </div>
-        </section>
+<section class="question" data-q="5"><div class="qnum">Question 06</div><h2>Pick your appointment day.</h2><p class="availability-note">Currently accepting appointments: Thursday</p><div class="options">
+<div class="option"><input id="thu" type="radio" name="q5" value="Thursday"><label for="thu">Thursday</label></div>
+</div></section>
 
-        <section class="question" data-question="4">
-          <div class="q-number">Question 05</div>
-          <h2>How committed are you to your decision?</h2>
-          <div class="options">
-            <div class="option"><input id="q4a" type="radio" name="q4" value="100% — let's do it"><label for="q4a">100% — let's do it</label></div>
-            <div class="option"><input id="q4b" type="radio" name="q4" value="Pretty committed"><label for="q4b">Pretty committed</label></div>
-            <div class="option"><input id="q4c" type="radio" name="q4" value="I'll probably change my mind"><label for="q4c">I'll probably change my mind</label></div>
-            <div class="option"><input id="q4d" type="radio" name="q4" value="I have absolutely no idea, I just trust you"><label for="q4d">I have absolutely no idea, I just trust you.</label></div>
-          </div>
-        </section>
+<section class="question" data-q="6"><div class="qnum">Question 07</div><h2>Pick your appointment time.</h2><p class="availability-note">Thursday availability</p><div class="options">
+<div class="option"><input id="t1" type="radio" name="q6" value="7:00 PM"><label for="t1">7:00 PM</label></div>
+<div class="option"><input id="t2" type="radio" name="q6" value="7:30 PM"><label for="t2">7:30 PM</label></div>
+<div class="option"><input id="t3" type="radio" name="q6" value="8:00 PM"><label for="t3">8:00 PM</label></div>
+<div class="option"><input id="t4" type="radio" name="q6" value="8:15 PM"><label for="t4">8:15 PM</label></div>
+<div class="option"><input id="t5" type="radio" name="q6" value="9:00 PM"><label for="t5">9:00 PM</label></div>
+<div class="option"><input id="t6" type="radio" name="q6" value="9:15 PM"><label for="t6">9:15 PM</label></div>
+</div></section>
 
-        <div class="nav">
-          <button id="backBtn" type="button" disabled>Back</button>
-          <button id="nextBtn" class="primary" type="button">Next</button>
-        </div>
-      </div>
-
-      <section class="result" id="result">
-        <div class="stamp">APPOINTMENT REQUEST RECEIVED</div>
-        <h2>Congratulations. It's too late now.</h2>
-        <p class="joke">
-          Thank you for choosing Pain &amp; Regret Studio. Your answers have been
-          carefully reviewed by absolutely no one.
-        </p>
-        <div class="details">
-          <div class="detail"><span>Tattoo concept</span><span id="r0"></span></div>
-          <div class="detail"><span>Style</span><span id="r1"></span></div>
-          <div class="detail"><span>Placement</span><span id="r2"></span></div>
-          <div class="detail"><span>Pain tolerance</span><span id="r3"></span></div>
-          <div class="detail"><span>Decision-making</span><span id="r4"></span></div>
-        </div>
-        <p class="joke">
-          Please arrive on time, bring good energy, and prepare to make a
-          decision you will have to explain to people forever.
-        </p>
-        <button type="button" class="primary" onclick="location.reload()">Book Another Appointment</button>
-      </section>
-    </main>
-
-    <footer>PAIN &amp; REGRET STUDIO • ALL SALES FINAL • REGRET IS NON-REFUNDABLE</footer>
-  </div>
+<div class="nav"><button id="back" disabled>Back</button><button id="next" class="primary">Next</button></div>
 </div>
 
+<section class="confirm" id="confirm">
+<div class="stamp">FINAL CONFIRMATION</div>
+<h2>Are you sure you want to do this?</h2>
+<p class="joke">This is your last chance to make a reasonable decision.</p>
+<button class="primary yes-btn" id="yes">YES, I'M SURE</button>
+<div class="no-wrap"><button class="no-btn" id="no">NO</button></div>
+</section>
+
+<section class="result" id="result">
+<div class="stamp">APPOINTMENT CONFIRMED 🎉</div>
+<h2>You're officially booked.</h2>
+<p class="joke">(No going back from this decision.)</p>
+<div class="details">
+<div class="detail"><span>Tattoo concept</span><span id="r0"></span></div>
+<div class="detail"><span>Style</span><span id="r1"></span></div>
+<div class="detail"><span>Placement</span><span id="r2"></span></div>
+<div class="detail"><span>Pain tolerance</span><span id="r3"></span></div>
+<div class="detail"><span>Commitment</span><span id="r4"></span></div>
+<div class="detail"><span>Day</span><span id="r5"></span></div>
+<div class="detail"><span>Time</span><span id="r6"></span></div>
+</div>
+<p class="joke">Please arrive on time, bring good energy, and prepare to explain this decision forever.</p>
+</section>
+</main>
+<footer>PAIN &amp; REGRET STUDIO • ALL SALES FINAL • REGRET IS NON-REFUNDABLE</footer>
+</div></div>
+
 <script>
-const questions = [...document.querySelectorAll('.question')];
-const nextBtn = document.getElementById('nextBtn');
-const backBtn = document.getElementById('backBtn');
-const counter = document.getElementById('counter');
-const progressBar = document.getElementById('progressBar');
-const quiz = document.getElementById('quiz');
-const result = document.getElementById('result');
-let current = 0;
-
-function selectedValue() {
-  const selected = document.querySelector(`input[name="q${current}"]:checked`);
-  return selected ? selected.value : null;
-}
-
-function update() {
-  questions.forEach((q, i) => q.classList.toggle('active', i === current));
-  counter.textContent = `${current + 1} / ${questions.length}`;
-  progressBar.style.width = `${((current + 1) / questions.length) * 100}%`;
-  backBtn.disabled = current === 0;
-  nextBtn.textContent = current === questions.length - 1 ? 'Submit Booking' : 'Next';
-}
-
-nextBtn.addEventListener('click', () => {
-  if (!selectedValue()) {
-    alert('Please choose one answer before continuing. We have standards. Sort of.');
-    return;
-  }
-  if (current < questions.length - 1) {
-    current++;
-    update();
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  } else {
-    for (let i = 0; i < questions.length; i++) {
-      const chosen = document.querySelector(`input[name="q${i}"]:checked`);
-      document.getElementById(`r${i}`).textContent = chosen ? chosen.value : '';
-    }
-    quiz.style.display = 'none';
-    result.classList.add('show');
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
-});
-
-backBtn.addEventListener('click', () => {
-  if (current > 0) {
-    current--;
-    update();
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
-});
-
+const qs=[...document.querySelectorAll('.question')], next=document.getElementById('next'), back=document.getElementById('back'), counter=document.getElementById('counter'), bar=document.getElementById('bar'), quiz=document.getElementById('quiz'), confirmBox=document.getElementById('confirm'), result=document.getElementById('result');
+let i=0;
+function update(){qs.forEach((q,n)=>q.classList.toggle('active',n===i));counter.textContent=(i+1)+' / '+qs.length;bar.style.width=((i+1)/qs.length*100)+'%';back.disabled=i===0;next.textContent=i===qs.length-1?'Submit Booking':'Next'}
+function choice(n){return document.querySelector('input[name="q'+n+'"]:checked')}
+next.onclick=()=>{if(!choice(i)){alert('Please choose one answer before continuing. We have standards. Sort of.');return} if(i<qs.length-1){i++;update();window.scrollTo({top:0,behavior:'smooth'})}else{quiz.style.display='none';confirmBox.classList.add('show');window.scrollTo({top:0,behavior:'smooth'})}};
+back.onclick=()=>{if(i>0){i--;update();window.scrollTo({top:0,behavior:'smooth'})}};
+document.getElementById('yes').onclick=()=>{for(let n=0;n<7;n++)document.getElementById('r'+n).textContent=choice(n)?.value||'';confirmBox.classList.remove('show');result.classList.add('show');window.scrollTo({top:0,behavior:'smooth'})};
+document.getElementById('no').onmouseenter=()=>moveNo();
+document.getElementById('no').ontouchstart=(e)=>{e.preventDefault();moveNo()};
+function moveNo(){const b=document.getElementById('no'),w=document.querySelector('.no-wrap');const maxX=Math.max(0,w.clientWidth-b.offsetWidth),maxY=Math.max(0,w.clientHeight-b.offsetHeight);b.style.left=Math.random()*maxX+'px';b.style.top=Math.random()*maxY+'px';b.style.transform='none'}
 update();
 </script>
 </body>
